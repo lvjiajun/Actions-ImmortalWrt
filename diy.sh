@@ -1,14 +1,3 @@
-#!/bin/bash
-
-# git config --local https.proxy socks5://host.docker.internal:1080
-
-git clone -b 2410 --single-branch --filter=blob:none https://github.com/padavanonly/immortalwrt-mt798x-24.10 immortalwrt-mt798x-24.10
-cd immortalwrt-mt798x-24.10
-
-./scripts/feeds update -a
-./scripts/feeds install -a
-
-# theme
 git clone https://github.com/gngpp/luci-theme-design.git package/luci-theme-design
 sed -i 's/luci-theme-bootstrap/luci-theme-design/g' feeds/luci/collections/luci-light/Makefile
 
@@ -34,13 +23,3 @@ git clone https://github.com/sbwml/luci-app-mosdns -b v5 package/mosdns
 # tailscale
 sed -i '/\/etc\/init\.d\/tailscale/d;/\/etc\/config\/tailscale/d;' feeds/packages/net/tailscale/Makefile
 git clone https://github.com/asvow/luci-app-tailscale package/luci-app-tailscale
-
-# defconfig
-cp -f ../jcg_q30-24.10-5.4-pw2-ssrplus-tailscale-mosdns.config .config
-# cp -f defconfig/mt7981-ax3000.config .config
-sed -i 's|IMG_PREFIX:=|IMG_PREFIX:=$(shell TZ="Asia/Shanghai" date +"%Y%m%d")-24.10-5.4-|' include/image.mk
-make menuconfig
-
-# compile and build
-# make download -j8
-# make -j$(nproc)
